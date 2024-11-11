@@ -1,0 +1,68 @@
+[gd_scene load_steps=5 format=3 uid="uid://cw8tbvmi3f6t0"]
+
+[ext_resource type="Script" path="res://world/world.gd" id="1_iwjb4"]
+[ext_resource type="PackedScene" uid="uid://cnl6c0nekprl2" path="res://world/tile_map.tscn" id="1_pisy7"]
+[ext_resource type="Script" path="res://scripts/tile_map.gd" id="2_rrayh"]
+
+[sub_resource type="SystemFont" id="SystemFont_8c5bo"]
+hinting = 2
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_iwjb4")
+
+[node name="TileMap" parent="." instance=ExtResource("1_pisy7")]
+script = ExtResource("2_rrayh")
+
+[node name="Camera2D" type="Camera2D" parent="TileMap"]
+zoom = Vector2(0.5, 0.5)
+position_smoothing_speed = 14.0
+
+[node name="ButtonLayout" type="CanvasLayer" parent="TileMap"]
+scale = Vector2(2, 2)
+transform = Transform2D(2, 0, 0, 2, 0, 0)
+
+[node name="Control" type="Control" parent="TileMap/ButtonLayout"]
+layout_mode = 3
+anchor_left = 0.337
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 102.776
+offset_top = 151.0
+offset_right = 1.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TileMap/ButtonLayout/Control"]
+layout_mode = 0
+offset_left = 0.5
+offset_right = 83.5
+offset_bottom = 119.0
+
+[node name="SpinBox" type="SpinBox" parent="TileMap/ButtonLayout/Control/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_bottom = NodePath("../SpinBox2")
+min_value = 4.0
+max_value = 80.0
+value = 4.0
+rounded = true
+update_on_text_changed = true
+
+[node name="SpinBox2" type="SpinBox" parent="TileMap/ButtonLayout/Control/VBoxContainer"]
+layout_mode = 2
+focus_neighbor_top = NodePath("../SpinBox")
+focus_neighbor_bottom = NodePath("../Button")
+min_value = 4.0
+max_value = 80.0
+value = 4.0
+rounded = true
+update_on_text_changed = true
+
+[node name="Button" type="Button" parent="TileMap/ButtonLayout/Control/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_8c5bo")
+theme_override_font_sizes/font_size = 10
+text = "Generate Maze"
+
+[connection signal="setCamera" from="TileMap" to="." method="_on_tile_map_set_camera"]
+[connection signal="pressed" from="TileMap/ButtonLayout/Control/VBoxContainer/Button" to="TileMap" method="_on_button_pressed"]
